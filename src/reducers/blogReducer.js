@@ -8,6 +8,9 @@ const reducer = (store = [], action) => {
       return [...old, { ...liked, likes: liked.likes + 1 }]
     case 'CREATE':
       return [...store, action.data]
+    case 'DELETE':
+      const blogs = store.filter(b => b.id !== action.id)
+      return blogs
     case 'INIT_BLOGS':
       return action.data
     default:
@@ -43,6 +46,16 @@ export const blogLike = (blog) => {
     dispatch({
       type: 'LIKE',
       id: updated.id
+    })
+  }
+}
+
+export const removeBlog = (id) => {
+  return async (dispatch) => {
+    await blogService.remove(id)
+    dispatch({
+      type: 'DELETE',
+      id: id
     })
   }
 }

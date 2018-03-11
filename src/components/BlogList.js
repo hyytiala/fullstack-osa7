@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 
 class BlogList extends React.Component {
   render() {
+    console.log(this.props.blogs)
     return (
       <Container>
         <h2>Blogs</h2>

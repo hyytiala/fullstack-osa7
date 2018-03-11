@@ -112,7 +112,7 @@ class App extends React.Component {
               <Route exact path="/" render={() => <BlogList />} />
               <Route path="/create" render={({ history }) => <BlogForm history={history} handleSubmit={this.addBlog} />} />
               <Route exact path="/users" render={() => <UserList />} />
-              <Route path="/blogs/:id" render={({ match }) => <Blog id={match.params.id} handleLike={this.addLike} />} />
+              <Route path="/blogs/:id" render={({ match, history }) => <Blog history={history} user={this.state.user.username} id={match.params.id} handleLike={this.addLike} />} />
               <Route path="/users/:id" render={({ match }) => <User id={match.params.id} />} />
             </div>
           </div>
