@@ -1,14 +1,10 @@
 import React from 'react'
 import { Menu, Button } from 'semantic-ui-react'
 import {
-  BrowserRouter as Router,
-  Route, Link, Redirect, NavLink
+  NavLink
 } from 'react-router-dom'
 
 class Navigation extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
 
     const active = {

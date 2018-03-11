@@ -2,10 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Table, Container } from 'semantic-ui-react'
 import { setNotification } from './../reducers/notificationReducer'
-import {
-  BrowserRouter as Router,
-  Route, Link, Redirect, NavLink
-} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class UserList extends React.Component {
 
@@ -15,6 +12,13 @@ class UserList extends React.Component {
       <Container>
         <h2>Users</h2>
         <Table striped celled>
+        <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Full name</Table.HeaderCell>
+          <Table.HeaderCell>Username</Table.HeaderCell>
+          <Table.HeaderCell>Amount of blogs</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
           <Table.Body>
             {this.props.users.map(user =>
               <Table.Row key={user.id} >

@@ -1,33 +1,23 @@
 import React from 'react'
 import { Form, Button } from 'semantic-ui-react'
+import { blogCreation } from './../reducers/blogReducer'
+import { setNotification } from './../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 class BlogForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      title: '',
-      author: '',
-      url: ''
-    }
-  }
 
-  handleLoginFieldChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
-
-  addBlog = (event) => {
-    event.preventDefault()
+  addBlog = (e) => {
+    e.preventDefault()
     const blogObject = {
-      title: this.state.title,
-      author: this.state.author,
-      url: this.state.url
+      title: e.target.title.value,
+      author: e.target.author.value,
+      url: e.target.url.value
     }
-    this.setState({
-      title: '',
-      author: '',
-      url: ''
-    })
-    this.props.handleSubmit(blogObject)
+    e.target.title.value = ''
+    e.target.author.value = ''
+    e.target.url.value = ''
+    this.props.blogCreation(blogObject)
+    this.props.setNotification(`Blog ${blogObject.title} by ${blogObject.author} added`, 5)
     this.props.history.push('/')
   }
 
@@ -40,24 +30,18 @@ class BlogForm extends React.Component {
             <label>Title</label>
             <input
               name='title'
-              value={this.state.title}
-              onChange={this.handleLoginFieldChange}
             />
           </Form.Field>
           <Form.Field>
             <label>Author</label>
             <input
               name='author'
-              value={this.state.author}
-              onChange={this.handleLoginFieldChange}
             />
           </Form.Field>
           <Form.Field>
             <label>URL</label>
             <input
               name='url'
-              value={this.state.url}
-              onChange={this.handleLoginFieldChange}
             />
           </Form.Field>
           <Button type='submit'>Save</Button>
@@ -67,4 +51,7 @@ class BlogForm extends React.Component {
   }
 }
 
-export default BlogForm
+export default connect(
+  null,
+  { blogCreation, setNotification }
+)(BlogForm)

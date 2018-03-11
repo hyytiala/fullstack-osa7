@@ -12,12 +12,12 @@ const reducer = (store = [], action) => {
 export const usersInitialization = () => {
   return async (dispatch) => {
     const users = await userService.getAll()
-    console.log(users)
     dispatch({
       type: 'INIT_USERS',
       data: users
     })
   }
 }
+
 
 export default reducer

@@ -6,6 +6,12 @@ const BlogTable = ({ blogs }) => (
   <div>
     <h2>Added blogs</h2>
     <Table striped celled>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Title</Table.HeaderCell>
+          <Table.HeaderCell>Author</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
       <Table.Body>
         {blogs.map(blog =>
           <Table.Row key={blog._id} >

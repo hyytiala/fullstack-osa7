@@ -6,6 +6,7 @@ import loginService from './services/login'
 import BlogForm from './components/blogForm'
 import { setNotification, setError } from './reducers/notificationReducer'
 import { usersInitialization } from './reducers/userReducer'
+import { blogsInitialization } from './reducers/blogReducer'
 import { connect } from 'react-redux'
 import { Container, Form, Button } from 'semantic-ui-react'
 import BlogList from './components/BlogList'
@@ -15,14 +16,13 @@ import UserList from './components/UserList'
 import User from './components/User'
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, NavLink
+  Route
 } from 'react-router-dom'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      blogs: [],
       username: '',
       password: '',
       user: null
@@ -30,9 +30,8 @@ class App extends React.Component {
   }
 
   componentDidMount = async () => {
-    const blogs = await blogService.getAll()
-    this.setState({ blogs })
     await this.props.usersInitialization()
+    await this.props.blogsInitialization()
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -41,48 +40,8 @@ class App extends React.Component {
     }
   }
 
-  sortList(a, b) {
-    return b.likes - a.likes
-  }
-
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
-  }
-
-  addBlog = async (blog) => {
-    try {
-      const savedBlog = await blogService.create(blog)
-      this.setState({ blogs: this.state.blogs.concat(savedBlog) })
-      this.props.setNotification(`Blog ${savedBlog.title} by ${savedBlog.author} added`, 5)
-    } catch (error) {
-      console.log(error)
-      this.props.setError('Something went wrong', 5)
-    }
-
-  }
-
-  removeBlog = async (id) => {
-    try {
-      await blogService.remove(id)
-      this.setState({
-        blogs: this.state.blogs.filter(blog => blog.id !== id)
-      })
-    } catch (error) {
-      console.log(error)
-      this.props.setError('Something went wrong', 5)
-    }
-  }
-
-  addLike = async (blog, id) => {
-    try {
-      const updatedBlog = await blogService.update(id, blog)
-      this.setState({
-        blogs: this.state.blogs.map(blog => blog.id !== id ? blog : updatedBlog)
-      })
-    } catch (error) {
-      console.log(error)
-      this.props.setError('Something went wrong', 5)
-    }
   }
 
   login = async (event) => {
@@ -115,18 +74,14 @@ class App extends React.Component {
     })
   }
 
-  blogById = (id) => {
-    return this.state.blogs.find(b => b.id === id)
-  }
-
   render() {
     const loginForm = () => (
       <div>
         <h2>Log in please</h2>
 
         <Form onSubmit={this.login}>
-        <Form.Field>
-        <label>Username</label>
+          <Form.Field>
+            <label>Username</label>
             <input
               type="text"
               name="username"
@@ -135,7 +90,7 @@ class App extends React.Component {
             />
           </Form.Field>
           <Form.Field>
-          <label>Password</label>
+            <label>Password</label>
             <input
               type="password"
               name="password"
@@ -154,10 +109,10 @@ class App extends React.Component {
           <div>
             <div>
               <Navigation user={this.state.user} logOut={this.logOut} />
-              <Route exact path="/" render={() => <BlogList blogs={this.state.blogs} />} />
+              <Route exact path="/" render={() => <BlogList />} />
               <Route path="/create" render={({ history }) => <BlogForm history={history} handleSubmit={this.addBlog} />} />
               <Route exact path="/users" render={() => <UserList />} />
-              <Route path="/blogs/:id" render={({ match }) => <Blog blog={this.blogById(match.params.id)} handleLike={this.addLike} />} />
+              <Route path="/blogs/:id" render={({ match }) => <Blog id={match.params.id} handleLike={this.addLike} />} />
               <Route path="/users/:id" render={({ match }) => <User id={match.params.id} />} />
             </div>
           </div>
@@ -182,5 +137,5 @@ class App extends React.Component {
 
 export default connect(
   null,
-  { setNotification, setError, usersInitialization }
+  { setNotification, setError, usersInitialization, blogsInitialization }
 )(App)
