@@ -14,6 +14,7 @@ import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import Navigation from './components/Menu'
 import UserList from './components/UserList'
+import User from './components/User'
 import {
   BrowserRouter as Router,
   Route, Link, Redirect, NavLink
@@ -30,17 +31,16 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
+  componentDidMount = async () => {
+    const blogs = await blogService.getAll()
+    this.setState({ blogs })
+    await this.props.usersInitialization()
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       this.setState({ user })
       blogService.setToken(user.token)
     }
-    this.props.usersInitialization()
   }
 
   sortList(a, b) {
@@ -157,9 +157,10 @@ class App extends React.Component {
             <div>
               <Navigation />
               <Route exact path="/" render={() => <BlogList blogs={this.state.blogs} />} />
-              <Route exact path="/create" render={({ history }) => <BlogForm history={history} handleSubmit={this.addBlog} />} />
+              <Route path="/create" render={({ history }) => <BlogForm history={history} handleSubmit={this.addBlog} />} />
               <Route exact path="/users" render={() => <UserList />} />
-              <Route exact path="/blogs/:id" render={({ match }) => <Blog blog={this.blogById(match.params.id)} />} />
+              <Route path="/blogs/:id" render={({ match }) => <Blog blog={this.blogById(match.params.id)} />} />
+              <Route path="/users/:id" render={({ match }) => <User id={match.params.id} />} />
             </div>
           </div>
         </Router>
