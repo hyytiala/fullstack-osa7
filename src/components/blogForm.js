@@ -1,4 +1,5 @@
 import React from 'react'
+import { Form, Button } from 'semantic-ui-react'
 
 class BlogForm extends React.Component {
   constructor(props) {
@@ -16,52 +17,51 @@ class BlogForm extends React.Component {
 
   addBlog = (event) => {
     event.preventDefault()
-      const blogObject = {
-        title: this.state.title,
-        author: this.state.author,
-        url: this.state.url
-      }
-      this.setState({
-        title: '',
-        author: '',
-        url: ''
-      })
-      this.props.handleSubmit(blogObject)
-      this.props.history.push('/')
-}
+    const blogObject = {
+      title: this.state.title,
+      author: this.state.author,
+      url: this.state.url
+    }
+    this.setState({
+      title: '',
+      author: '',
+      url: ''
+    })
+    this.props.handleSubmit(blogObject)
+    this.props.history.push('/')
+  }
 
   render() {
     return (
       <div>
         <h2>Add new Blog</h2>
-
-        <form onSubmit={this.addBlog}>
-          <div>
-            Title
-          <input
+        <Form onSubmit={this.addBlog}>
+          <Form.Field>
+            <label>Title</label>
+            <input
               name='title'
               value={this.state.title}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <div>
-            Author
-          <input
+          </Form.Field>
+          <Form.Field>
+            <label>Author</label>
+            <input
               name='author'
               value={this.state.author}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <div>
-            URL
-          <input
+          </Form.Field>
+          <Form.Field>
+            <label>URL</label>
+            <input
               name='url'
               value={this.state.url}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <button>Save</button>
-        </form>
+          </Form.Field>
+          <Button type='submit'>Save</Button>
+        </Form>
       </div>
     )
   }

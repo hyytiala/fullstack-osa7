@@ -12,16 +12,12 @@ const BlogTable = ({ blogs }) => (
             <Table.Cell>{blog.title}</Table.Cell>
             <Table.Cell>{blog.author}</Table.Cell>
           </Table.Row>)}
-
       </Table.Body>
     </Table>
   </div>
 )
 
 class User extends React.Component {
-
-
-
   render() {
     return (
       <div>
