@@ -1,15 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Message } from 'semantic-ui-react'
 
 class Error extends React.Component {
   render() {
-    console.log(this.props.notification.error)
+    const style = {
+      margin: '10px'
+    }
     return (
-      <div >
+      <div style={style} >
         {this.props.notification.error &&
-          <div className="error">
-            {this.props.notification.error}
-          </div>}
+          <Message negative >{this.props.notification.error}</Message>}
       </div>
     )
   }

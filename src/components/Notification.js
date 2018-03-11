@@ -1,15 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Message } from 'semantic-ui-react'
 
 class Notification extends React.Component {
   render() {
-    console.log(this.props.notification.message)
+    const style = {
+      margin: '10px'
+    }
     return (
-      <div >
+      <div style={style} >
         {this.props.notification.message &&
-          <div className="notification">
-            {this.props.notification.message}
-          </div>}
+          <Message success >{this.props.notification.message}</Message>}
       </div>
     )
   }

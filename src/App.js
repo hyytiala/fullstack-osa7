@@ -4,12 +4,10 @@ import Error from './components/Error'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogForm from './components/blogForm'
-import Togglable from './components/Togglable'
-import TogglableBlog from './components/TogglableBlog'
 import { setNotification, setError } from './reducers/notificationReducer'
 import { usersInitialization } from './reducers/userReducer'
 import { connect } from 'react-redux'
-import { Container } from 'semantic-ui-react'
+import { Container, Form, Button } from 'semantic-ui-react'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import Navigation from './components/Menu'
@@ -126,27 +124,27 @@ class App extends React.Component {
       <div>
         <h2>Log in please</h2>
 
-        <form onSubmit={this.login}>
-          <div>
-            Username
+        <Form onSubmit={this.login}>
+        <Form.Field>
+        <label>Username</label>
             <input
               type="text"
               name="username"
               value={this.state.username}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <div>
-            Password
+          </Form.Field>
+          <Form.Field>
+          <label>Password</label>
             <input
               type="password"
               name="password"
               value={this.state.password}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <button>log in</button>
-        </form>
+          </Form.Field>
+          <Button type='submit'>log in</Button>
+        </Form>
       </div>
     )
 
@@ -155,11 +153,11 @@ class App extends React.Component {
         <Router>
           <div>
             <div>
-              <Navigation />
+              <Navigation user={this.state.user} logOut={this.logOut} />
               <Route exact path="/" render={() => <BlogList blogs={this.state.blogs} />} />
               <Route path="/create" render={({ history }) => <BlogForm history={history} handleSubmit={this.addBlog} />} />
               <Route exact path="/users" render={() => <UserList />} />
-              <Route path="/blogs/:id" render={({ match }) => <Blog blog={this.blogById(match.params.id)} />} />
+              <Route path="/blogs/:id" render={({ match }) => <Blog blog={this.blogById(match.params.id)} handleLike={this.addLike} />} />
               <Route path="/users/:id" render={({ match }) => <User id={match.params.id} />} />
             </div>
           </div>
@@ -174,7 +172,6 @@ class App extends React.Component {
         {this.state.user === null ?
           loginForm() :
           <div>
-            <p>{this.state.user.name} logged in <button onClick={this.logOut}>Log Out</button></p>
             {blogForm()}
           </div>
         }
